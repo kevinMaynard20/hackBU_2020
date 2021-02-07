@@ -84,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   searchAndNavigate() async{ //p much google's implementation of Geolocator
+    _markers = HashSet<Marker>();
     Geolocator().placemarkFromAddress(search).then((result) async { //Generates palcemarker from 'search'
         final GoogleMapController mapController = await _controller.future; //getting mapController from Future
         mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(

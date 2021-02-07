@@ -4,9 +4,11 @@ import 'package:test/test.dart';
 import 'LocationDoc.dart'; 
 
 
+//Methods that handle all wiki api calls
 
-class WikiAPIHandler {
-  Future<List<Object>> getWikiPages(List<double> coords) async {
+
+//Asynchronous method that returns a FUTURE containing a list of LocationDocs based on the wikipedia pages
+Future<List<Object>> getWikiPages(List<double> coords) async {
     var cordsString = coords[0].toString() + '|' + coords[1].toString();  //Getting right coords format
     var url = 'https://en.wikipedia.org/w/api.php?'; //API Endpoint
     var params = {    
@@ -41,7 +43,7 @@ class WikiAPIHandler {
 
 
 //Takes the pages object wikipedia returns and converts it into a list of classes that we need
-  List<Object> formatWikiPages(Map pages){
+List<Object> formatWikiPages(Map pages){
     var LocationDocList = <Object>[]; 
     pages.forEach( (pageId, pageBody){
       var Name = pageBody['title'];
@@ -60,4 +62,3 @@ class WikiAPIHandler {
     return LocationDocList ; 
   }
 
-}

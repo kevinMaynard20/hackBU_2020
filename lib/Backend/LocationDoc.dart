@@ -1,5 +1,7 @@
+//Wireframe for what every yelp and wikipedia page will be turned into
+
 class LocationDoc {
-  String PageType;
+  String PageType; //WikiPage or YelpPage
   String Name; 
   String Descript;
   String ImageLink; 
@@ -8,6 +10,7 @@ class LocationDoc {
   double Lat;
   double Lon;
 
+  //Construr includes everything that is absolutley nessecary for each location we include
   LocationDoc(Name, Lat, Lon, PageType){
     this.Name = Name;
     this.Lat = Lat;
@@ -28,7 +31,7 @@ class LocationDoc {
     ImageLink = link; 
   }
 
-//Getter methods
+//Getter methods to get different pieces of Data;
   String getType(){
     return PageType; 
   }

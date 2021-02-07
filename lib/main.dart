@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'Backend/API_Handler.dart'; 
+import 'Backend/LocationDoc.dart';
 
 void main() => runApp(MyApp());
 
@@ -44,7 +45,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
+
               }, //OnMapCreated function moved up
+              markers: _markers,
             ),
           Positioned(
             top: 30.0,
@@ -89,32 +92,28 @@ class _MyHomePageState extends State<MyHomePage> {
         
         //Getting locations in the area
         var coords = [result[0].position.latitude, result[0].position.longitude];
-        var locations = await APIHandler.getLocationInfo(coords);
-        
-        //Just Pritning out the locations for now will be changed late
-        for(var i = 0; i < locations.length ; i ++){
-          print(locations[i]); 
-        }
+        await generatePins(coords);
 
 
     });
   }
-//   generatePins(){
-// Classname object = new Classname(search, lat, long)
-//     for(var i = 0; i < 8; i++){
-//     setState(() {
-//       _markers.add(
-//         Marker(
-//           markerId: MarkerId(object[i].getReviews()),
-//           position: LatLng( object[i].getLat(), object[i].getLong()),
-//           infoWindow: InfoWindow(
-//             title: object[i].getName,
-//             snippet: object[i].getDescription(),
-//           ),
-//         ),
-//       );
-//     }
-//     }
-//
-//   }
+generatePins(List<double> coords) async{
+    var locations = await APIHandler.getLocationInfo(coords);
+    for(var i = 0; i < 8; i++){
+    print(locations[i]);
+    setState((){
+      _markers.add(
+        Marker(
+          markerId: MarkerId(locations[i].getName() + locations[i].getLat().toString()),
+          position: LatLng( locations[i].getLat(), locations[i].getLon()),
+          infoWindow: InfoWindow(
+            title: locations[i].getName(),
+            snippet: locations[i].getDescript(),
+          ),
+        ),
+      );
+    });
+    }
+
+  }
 }

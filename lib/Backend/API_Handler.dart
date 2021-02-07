@@ -1,9 +1,10 @@
 import 'WikiAPI.dart';
+import 'LocationDoc.dart';
 
 
 class APIHandler {
 
-   static Future<List<Object>> getLocationInfo(coords) async {
+   static Future<List<LocationDoc>> getLocationInfo(coords) async {
      var masterList = [];
      
      //Get wikipedia pages
@@ -12,13 +13,13 @@ class APIHandler {
      masterList.addAll(wikiList);
 
     //Get Yelp Pages
-
+    masterList = List<LocationDoc>.from(masterList);
      return masterList ; 
    }
 
   //Randomly takes out restaurants so that the list includes at most maxAllowed items
   //NEEDS TO BE CHANGED
-   static List<Object> Trim(List<Object> list, int maxAllowed ){
+   static List<LocationDoc> Trim(List<LocationDoc> list, int maxAllowed ){
      //CHANGE THIS
      return list; 
    }

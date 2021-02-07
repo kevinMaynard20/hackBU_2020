@@ -7,8 +7,10 @@ class LocationDoc {
   String ImageLink; 
   String Type; 
   String URL; 
+  String Review;
   double Lat;
   double Lon;
+  
 
   //Construr includes everything that is absolutley nessecary for each location we include
   LocationDoc(Name, Lat, Lon, PageType){
@@ -23,8 +25,13 @@ class LocationDoc {
     this.Descript = Descript ; 
   }
 
+
   void setURL(String URL){
     this.URL = URL;
+  }
+
+  void setReview(String Review){
+    this.Review = Review; 
   }
 
   void setImageLink(String link){
@@ -51,6 +58,8 @@ class LocationDoc {
   String getURL(){
     return URL;
   }
+
+
 
   double getLat(){
     return Lat; 

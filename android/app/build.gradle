@@ -52,6 +52,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
 }
 
 flutter {
@@ -60,4 +61,14 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+//Change to try and fix stupid bug
+allprojects{
+    
+    configurations.all {
+        resolutionStrategy.force "com.google.android.gms:play-services-tasks:16.0.1"
+        resolutionStrategy.force"com.google.android.gms:play-services-basement:16.0.1"
+        resolutionStrategy.force"com.google.android.gms:play-services-base:16.0.1"
+    }
 }

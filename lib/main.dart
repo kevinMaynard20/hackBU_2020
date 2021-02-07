@@ -1,5 +1,5 @@
 import 'dart:collection';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget{
   }                                                    // most of this stuff on top is p basic
 
 class _MyHomePageState extends State<MyHomePage> {
-  GoogleMapController mapController;
+  Completer<GoogleMapController> _controller = Completer(); //turning it into some kinda promise idk Just trying to fix the issue this is code from docs 
   String search;
   Set<Marker> _markers = HashSet<Marker>();//hashset 0_0 cool taylor
 
@@ -41,6 +41,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 target: LatLng(0 ,0), // arbitrary location
                 zoom: 10
               ),
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              }, //OnMapCreated function moved up
             ),
           Positioned(
             top: 30.0,
@@ -75,14 +78,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
   }
-  void onMapCreated(controller){
-    print('\n \n INITIALIZING MAP \n \n');
-    setState(() { // runs on startup initializes map
-      mapController = controller;
-    });
-  }
-  searchAndNavigate() { //p much google's implementation of Geolocator
-    Geolocator().placemarkFromAddress(search).then((result) { //Generates palcemarker from 'search'
+
+  searchAndNavigate() async{ //p much google's implementation of Geolocator
+    Geolocator().placemarkFromAddress(search).then((result) async { //Generates palcemarker from 'search'
+        final GoogleMapController mapController = await _controller.future;
         mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
           target: LatLng(result[0].position.latitude, result[0].position.longitude),//
           zoom: 10.0)));

@@ -1,38 +1,108 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
 
-class _MyAppState extends State<MyApp> {
-  GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+class MyApp extends StatelessWidget{
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Date Night'),
-          backgroundColor: Colors.red[700],
-        ),
-        body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
-          ),
-        ),
-      ),
+      home: MyHomePage(),
     );
   }
+
+}
+  class MyHomePage extends StatefulWidget{
+  _MyHomePageState createState() => _MyHomePageState(); //Kind of works how suppliers do in java
+  }                                                    // most of this stuff on top is p basic
+
+class _MyHomePageState extends State<MyHomePage> {
+  GoogleMapController mapController;
+  String search;
+  Set<Marker> _markers = HashSet<Marker>();//hashset 0_0 cool taylor
+
+  @override
+  Widget build(BuildContext context) { // reformatted most of this based off of what
+
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('D8 Night'), // i changed the name B )
+          backgroundColor: Colors.red[700],
+        ),
+        body: Stack(        // layers widgets in reverse order
+        children: <Widget>[ //
+          GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(0 ,0), // arbitrary location
+                zoom: 10
+              ),
+            ),
+          Positioned(
+            top: 30.0,
+            right: 15.0,
+            left: 15.0,
+            child: Container(//
+              height: 50,
+              width: double.infinity,// text box aint got no limit
+              decoration: BoxDecoration(
+                color: Colors.pink[100],//jus tryna make it love themed team : .. (
+              ),
+              child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Type your destination',
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(left: 15, top: 15),
+                suffixIcon: IconButton(
+                icon: Icon(Icons.search), // adds search icon
+                  onPressed:  searchAndNavigate, // calls the class that moves and
+                    iconSize: 30,
+    )
+              ),
+                onChanged: (val){
+                setState(() {
+                  search = val;
+                });
+                }
+              )
+            )
+          )
+        ],
+        ),
+      );
+  }
+  void onMapCreated(controller){
+    setState(() { // runs on startup initializes map
+      mapController = controller;
+    });
+  }
+  searchAndNavigate() { //p much google's implementation of Geolocator
+    Geolocator().placemarkFromAddress(search).then((result) { //Generates palcemarker from 'search'
+        mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          target: LatLng(result[0].position.latitude, result[0].position.longitude),//
+          zoom: 10.0)));
+    });
+  }
+//   generatePins(){
+// Classname object = new Classname(search, lat, long)
+//     for(var i = 0; i < 8; i++){
+//     setState(() {
+//       _markers.add(
+//         Marker(
+//           markerId: MarkerId(object[i].getReviews()),
+//           position: LatLng( object[i].getLat(), object[i].getLong()),
+//           infoWindow: InfoWindow(
+//             title: object[i].getName,
+//             snippet: object[i].getDescription(),
+//           ),
+//         ),
+//       );
+//     }
+//     }
+//
+//   }
 }

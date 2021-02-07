@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'Backend/API_Handler.dart'; 
 
 void main() => runApp(MyApp());
 
@@ -81,10 +82,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   searchAndNavigate() async{ //p much google's implementation of Geolocator
     Geolocator().placemarkFromAddress(search).then((result) async { //Generates palcemarker from 'search'
-        final GoogleMapController mapController = await _controller.future;
+        final GoogleMapController mapController = await _controller.future; //getting mapController from Future
         mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
           target: LatLng(result[0].position.latitude, result[0].position.longitude),//
-          zoom: 10.0)));
+          zoom: 15.0)));
+        
+        //Getting locations in the area
+        var coords = [result[0].position.latitude, result[0].position.longitude];
+        var locations = await APIHandler.getLocationInfo(coords);
+        
+        //Just Pritning out the locations for now will be changed late
+        for(var i = 0; i < locations.length ; i ++){
+          print(locations[i]); 
+        }
+
+
     });
   }
 //   generatePins(){

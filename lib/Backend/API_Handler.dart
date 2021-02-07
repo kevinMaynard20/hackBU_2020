@@ -2,6 +2,7 @@ import 'WikiAPI.dart';
 
 
 class APIHandler {
+
    static Future<List<Object>> getLocationInfo(coords) async {
      var masterList = [];
      

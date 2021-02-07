@@ -76,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
       );
   }
   void onMapCreated(controller){
+    print('\n \n INITIALIZING MAP \n \n');
     setState(() { // runs on startup initializes map
       mapController = controller;
     });
